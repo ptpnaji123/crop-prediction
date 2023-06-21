@@ -64,8 +64,6 @@ data['Yield (hg/ha)'] = df_onehot['Yield (hg/ha)']
 y = data['Yield (hg/ha)']
 X = data.drop('Yield (hg/ha)', axis=1)
 
-print(X)
-
 cols = list(X.columns)
 pmax = 1
 while (len(cols)>0):
@@ -155,10 +153,11 @@ neg_mean_squared_error_values = []
 neg_root_mean_squared_error_values = []
 
 for name, est in estimators:
-  # Kreuzvalidierung
+  print("Running", name + "...", end="")
   score = cross_validate(est, X_train, y_train, cv=5,
                          scoring=['r2', 'max_error', 'neg_mean_absolute_error', 'neg_mean_squared_error', 'neg_root_mean_squared_error'],
                          n_jobs=-1)
+  print("Done")
 
   # Abspeichern der Werte
   r2_values.append(score['test_r2'])
@@ -174,6 +173,3 @@ print(u'MAX: {:,.0f} \u00B1 {:,.0f}'.format(np.mean(max_error_values[regression]
 print(u'MAE: {:,.0f} \u00B1 {:,.0f}'.format(np.mean(neg_mean_absolute_error_values[regression]), np.std(neg_mean_absolute_error_values[regression])))
 print(u'MSE: {:,.0f} \u00B1 {:,.0f}'.format(np.mean(neg_mean_squared_error_values[regression]), np.std(neg_mean_squared_error_values[regression])))
 print(u'RMSE: {:,.0f} \u00B1 {:,.0f}'.format(np.mean(neg_root_mean_squared_error_values[regression]), np.std(neg_root_mean_squared_error_values[regression])))
-
-with open("model.pkl", "wb") as f:
-   pickle.dump(model, f)
