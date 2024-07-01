@@ -1,15 +1,20 @@
-import joblib
+from model import Model
 
-model = joblib.load("model.joblib")
+model = Model()
+model.load()
 
-print("Enter Data")
+print(model.encoder.categories_)
 
-x1 = float(input("Precipitation: "))
-x2 = float(input("Min Temperature: "))
-x3 = float(input("Cloud Cover: "))
-x4 = float(input("Vapour Pressure: "))
-x5 = float(input("Area: "))
+area = input("Country: ")
+area = area.strip()
 
-prediction = model.predict([[x1, x2, x3, x4, x5]])[0]
+item = input("Item: ")
+item = item.strip()
 
-print("\nProduction =", prediction)
+rainfall = float(input("Average Rainfall Per Year (mm): "))
+pesticides = float(input("Pesticides (tonn): "))
+temperature = float(input("Average Temperature (C): "))
+
+production = model.predict(area, item, rainfall, pesticides, temperature)
+
+print("Production =", production)
